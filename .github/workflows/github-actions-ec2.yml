@@ -23,5 +23,3 @@ jobs:
       - name: rsync over ssh
         run:
            chmod +x ./scripts/test.sh 
-        run:
-           ./scripts/test.sh
