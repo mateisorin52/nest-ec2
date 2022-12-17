@@ -13,6 +13,10 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
 
+      
+      - name: rsync over ssh
+        run:  |
+          npm i --ignore-scripts
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
         env:
@@ -20,6 +24,3 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-      - name: rsync over ssh
-        run:  |
-          npm i --ignore-scripts
