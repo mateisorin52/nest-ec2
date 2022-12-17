@@ -22,6 +22,4 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
       - name: rsync over ssh
         run:  |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          chmod +x ./scripts/test.sh 
           npm i --ignore-scripts
