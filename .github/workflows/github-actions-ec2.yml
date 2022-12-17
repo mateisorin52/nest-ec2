@@ -34,4 +34,5 @@ jobs:
       - run: pm2 -V #check pm2 version
       - run: pm2 list #check pm2 list
       - run: ls
+      - run: pwd
       - run: pm2 status
