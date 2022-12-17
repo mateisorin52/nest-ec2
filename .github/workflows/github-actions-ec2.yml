@@ -20,8 +20,5 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-      - name: Run script file
-        run: |
-          chmod +x ./scripts/test.sh
-          ./scripts/test.sh
-        shell: bash
+      - name: rsync over ssh
+        run: ./scripts/test.sh
