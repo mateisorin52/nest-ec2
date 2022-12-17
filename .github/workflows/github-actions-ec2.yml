@@ -22,4 +22,6 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
       - name: rsync over ssh
         run:
-           chmod +x ./scripts/test.sh 
+          chmod +x ./scripts/test.sh 
+        run:
+          ./scripts/test.sh
