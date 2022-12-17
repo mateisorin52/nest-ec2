@@ -21,4 +21,3 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             npm install
-            npm run build
