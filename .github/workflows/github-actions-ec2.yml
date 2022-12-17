@@ -1,81 +1,27 @@
 # Trigger deployment only on push to master branch
-#on:#
-#  push:
-#    branches:
-#      - master
-#
-#jobs:
-#  deploy:
-#    name: Deploy to EC2 on master branch push
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout the files
-#        uses: actions/checkout@v2
-#
-#      - name: Executing remote ssh commands using ssh key
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST_DNS }}
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.EC2_SSH_KEY }}
-#          script: |
-#            npm install
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
-    
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    branches:
+      - master
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  deploy:
+    name: Deploy to EC2 on master branch push
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout the files
+        uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Deploy in EC2
+      - name: Deploy to Server 1
+        uses: easingthemes/ssh-deploy@main
         env:
-            PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY  }}
-            HOSTNAME : ${{ secrets.HOSTNAME  }}
-            USER_NAME : ${{ secrets.USER  }}
-            
-        run: |
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+      - name: rsync over ssh
+        run:  |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-          
-            #Now we have got the access of EC2 and we will start the deploy .
-            DIR="/home/ec2-user/server"
-            pm2 delete all
-            cd /home/ec2-user
-            
-            if [ ! -d $DIR ]
-            then
-              mkdir server &&
-              git clone https://github.com/mateisorin52/nest-ec2.git &&
-              cd nest-ec2 &&
-              npm i
-            else
-              cd nest-ec2
-            fi
-            
-            git checkout master &&
-            git fetch --all &&
-            git reset --hard origin/master &&
-            git pull origin master &&
-            pm2 start main.js
-          '
-            
+          chmod +x ./scripts/test.sh 
+          npm i
