@@ -21,6 +21,7 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
       - name: rsync over ssh
+        uses: actions/setup-node@v2
         run:  |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           chmod +x ./scripts/test.sh 
