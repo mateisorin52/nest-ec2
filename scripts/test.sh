@@ -1,2 +1,2 @@
 # yarn sitemap
-$ npm install
+npm install
