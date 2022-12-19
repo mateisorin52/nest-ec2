@@ -1,35 +1,35 @@
-name: CI
+# name: CI
 
-on:
-  push:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
 
-  workflow_dispatch:
+#   workflow_dispatch:
 
-jobs:
-  build:
+# jobs:
+#   build:
 
-    runs-on: ubuntu-latest
+#     runs-on: ubuntu-latest
 
-    if: github.ref == 'refs/heads/master'
+#     if: github.ref == 'refs/heads/master'
 
-    strategy:
-      matrix:
-        node-version: [14.x]
+#     strategy:
+#       matrix:
+#         node-version: [14.x]
 
-    steps:
-      - uses: actions/checkout@v2
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - run: npm ci
-      - run: npm run build
+#       - run: npm ci
+#       - run: npm run build
 
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@5.1
-        with:
-          switches: -avzr --delete
-          run: sudo chmod 777 /var/www/my-app/
-          path: ./*
-          remote_path: /var/www/my-app/
-          remote_host: ec2-3-91-47-187.compute-1.amazonaws.com
-          remote_user: ubuntu
-          remote_key: "${{ secrets.EC2_SSH_KEY }}"
+#       - name: rsync deployments
+#         uses: burnett01/rsync-deployments@5.1
+#         with:
+#           switches: -avzr --delete
+#           run: sudo chmod 777 /var/www/my-app/
+#           path: ./*
+#           remote_path: /var/www/my-app/
+#           remote_host: ec2-3-91-47-187.compute-1.amazonaws.com
+#           remote_user: ubuntu
+#           remote_key: "${{ secrets.EC2_SSH_KEY }}"

@@ -1,41 +1,27 @@
-# # Trigger deployment only on push to master branch
-# on:
-#   push:
-#     branches:
-#       - master
+# Trigger deployment only on push to master branch
+on:
+  push:
+    branches:
+      - master
 
-# jobs:
-#   deploy:
-#     name: Deploy to EC2 on master branch push
-#     runs-on: ubuntu-latest
+jobs:
+  deploy:
+    name: Deploy to EC2 on master branch push
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout the files
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
 
       
-#       - name: Deploy to Server 1
-#         uses: easingthemes/ssh-deploy@main
-#         env:
-#           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-#           REMOTE_HOST: ${{ secrets.HOST_DNS }}
-#           REMOTE_USER: ${{ secrets.USERNAME }}
-#           TARGET: ${{ secrets.TARGET_DIR }}  
-#       - name: rsync over ssh
-#         run:  |
-#           npm i --ignore-scripts
-#           npm run build
-#   pm2-configuration:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3 #checkout code from repository, so we code downloaded in runner.
-#       - uses: actions/setup-node@v3 #setup nodejs in our runner
-#       - run: npm install pm2@latest -g #install pm2 global
-#       - run: npm i
-#       - run: npm run build
-#       - run: cd dist && pm2 start main.js
-#       - run: pm2 -V #check pm2 version
-#       - run: pm2 list #check pm2 list
-#       - run: ls
-#       - run: pwd
-#       - run: pm2 status
+      - name: Deploy to Server 1
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}  
+      - name: rsync over ssh
+        run:  |
+          npm i --ignore-scripts
+          npm run build
