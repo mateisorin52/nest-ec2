@@ -27,6 +27,7 @@ jobs:
         uses: burnett01/rsync-deployments@5.1
         with:
           switches: -avzr --delete
+          run: sudo chmod 777 /var/www/my-app/
           path: ./*
           remote_path: /var/www/my-app/
           remote_host: ec2-3-91-47-187.compute-1.amazonaws.com
