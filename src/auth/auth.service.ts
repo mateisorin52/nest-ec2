@@ -9,7 +9,7 @@ export class AuthService {
   async loginUser(user: { email: string; password: string }): Promise<any> {
     const userExists = await this.prismaService.user.findFirst({
       include: { bank_account: true, friends: true },
-
+      //
       where: { email: user.email },
     });
     if (!userExists) return { success: false, message: 'User does not exist' };
