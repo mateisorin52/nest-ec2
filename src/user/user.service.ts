@@ -16,6 +16,7 @@ export class UserService {
   async getSingleUser(id: string): Promise<User> {
     return await this.prismaService.user.findUnique({
       where: { id },
+
       include: { friends: true, bank_account: true },
     });
   }
