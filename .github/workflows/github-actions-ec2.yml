@@ -13,6 +13,11 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
 
+      - name: rsync over ssh
+        run: |
+
+          npx prisma generate
+
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
         env:
