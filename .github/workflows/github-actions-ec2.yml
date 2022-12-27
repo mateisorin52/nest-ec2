@@ -1,4 +1,3 @@
-# Trigger deployment only on push to master branch
 on:
   push:
     branches:
@@ -13,6 +12,10 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
 
+      - name: rsync over ssh
+        run: |
+          npm i --ignore-scripts
+          npm run build
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
         env:
@@ -20,3 +23,17 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
+  pm2-configuration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 #checkout code from repository, so we code downloaded in runner.
+      - uses: actions/setup-node@v3 #setup nodejs in our runner
+      - run: npm install pm2@latest -g #install pm2 global
+      - run: npm i
+      - run: npm run build
+      - run: cd dist && pm2 start main.js
+      - run: pm2 -V #check pm2 version
+      - run: pm2 list #check pm2 list
+      - run: ls
+      - run: pwd
+      - run: pm2 status
