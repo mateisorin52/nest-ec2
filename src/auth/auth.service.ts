@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 const bcrypt = require('bcrypt');
 @Injectable()
@@ -18,18 +19,19 @@ export class AuthService {
       userExists.password_hash,
     );
     if (!passMatch) return { success: false, message: 'Password is incorrect' };
-    return this.signToken(userExists.id, user.email);
+    return this.signToken(userExists);
   }
 
-  async signToken(userId: string, email: string): Promise<{ token: string }> {
+  async signToken(user: User): Promise<{ token: string; user: User }> {
     const payload = {
-      sub: userId,
-      email,
+      sub: user.id,
+      email: user.email,
     };
     return {
+      user,
       token: await this.jwt.signAsync(payload, {
         secret: 'secret',
-        expiresIn: '15m',
+        expiresIn: '60m',
       }),
     };
   }

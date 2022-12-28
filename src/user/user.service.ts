@@ -31,7 +31,6 @@ export class UserService {
     const hashedPass = await bcrypt
       .genSalt(this.saltRounds)
       .then((salt) => bcrypt.hash(user.password, salt));
-    console.log(hashedPass);
     return await this.prismaService.user.create({
       include: { bank_account: true },
       data: {
@@ -47,5 +46,53 @@ export class UserService {
         },
       },
     });
+  }
+  async sendMoneyToRecipient(
+    senderBankAccountId: string,
+    recipientBankAccountId: string,
+    amount: number,
+  ) {
+    if (!senderBankAccountId || !recipientBankAccountId || !amount) {
+      return { success: false, message: 'Fields were not filled properly.' };
+    }
+    const senderBankAccount = await this.prismaService.bankAccount.findUnique({
+      where: { id: senderBankAccountId },
+    });
+    const recipientBankAccount =
+      await this.prismaService.bankAccount.findUnique({
+        where: { id: recipientBankAccountId },
+      });
+    if (!senderBankAccount || !recipientBankAccount)
+      return {
+        success: false,
+        message: 'Sender or recipient bank account does not exist.',
+      };
+    if (senderBankAccount.amount < amount)
+      return {
+        success: false,
+        message: "You don't have enough money to send.",
+      };
+    if (senderBankAccount.currency !== recipientBankAccount.currency)
+      return {
+        success: false,
+        message: `You can't send ${senderBankAccount.currency} to ${recipientBankAccount.currency}.`,
+      };
+    recipientBankAccount.amount = recipientBankAccount.amount + amount;
+    senderBankAccount.amount = senderBankAccount.amount - amount;
+    const transaction1 = await this.prismaService.bankAccount.update({
+      data: { amount: recipientBankAccount.amount },
+      where: { id: recipientBankAccount.id },
+    });
+    const transaction2 = await this.prismaService.bankAccount.update({
+      data: { amount: senderBankAccount.amount },
+      where: { id: senderBankAccount.id },
+    });
+    if (transaction1 && transaction2) {
+      return {
+        success: true,
+        message: 'Transaction successful!',
+        data: [transaction1, transaction2],
+      };
+    }
   }
 }
