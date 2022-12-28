@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TestValService } from './test-val.service';
 
 @Controller('test-val')
@@ -11,5 +11,9 @@ export class TestValController {
   @Post('/')
   async getTestValWithId(@Body() data: { id: string }) {
     return this.testValService.getTestValWithId(data.id);
+  }
+  @Get('/sg/:id')
+  async getTestValSg(@Param('id') id) {
+    return this.testValService.getTestValWithId(id);
   }
 }
