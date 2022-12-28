@@ -17,6 +17,12 @@ export class TestValService {
       occupation: 'Software Developer',
       location: 'Bucharest',
     },
+    {
+      id: '3',
+      name: 'Gigel Frone',
+      age: 25,
+      location: 'Bucharest',
+    },
   ];
   getTestVal() {
     return this.users;
