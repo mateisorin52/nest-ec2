@@ -22,12 +22,15 @@ export class AuthService {
     return this.signToken(userExists);
   }
 
-  async signToken(user: User): Promise<{ token: string; user: User }> {
+  async signToken(
+    user: User,
+  ): Promise<{ token: string; user: User; success: boolean }> {
     const payload = {
       sub: user.id,
       email: user.email,
     };
     return {
+      success: true,
       user,
       token: await this.jwt.signAsync(payload, {
         secret: 'secret',
