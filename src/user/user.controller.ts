@@ -12,12 +12,12 @@ import { UserService } from './user.service';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  //@UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   @Get('/')
   async getUsers(): Promise<User[]> {
     return await this.userService.getUsers();
   }
-  //@UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   @Get('/me')
   async getMe(@GetUser('') user: User) {
     return user;
