@@ -31,7 +31,7 @@ export class UserService {
     const hashedPass = await bcrypt
       .genSalt(this.saltRounds)
       .then((salt) => bcrypt.hash(user.password, salt));
-    return await this.prismaService.user.create({
+    const createdUser = await this.prismaService.user.create({
       include: { bank_account: true },
       data: {
         email: user.email,
@@ -46,6 +46,11 @@ export class UserService {
         },
       },
     });
+    return {
+      message: 'User created sucsessfully.',
+      success: true,
+      user: createdUser,
+    };
   }
   async sendMoneyToRecipient(
     senderBankAccountId: string,

@@ -10,7 +10,8 @@ export class UserDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
-  bank_account?: {
+  @IsNotEmpty()
+  bank_account: {
     currency: 'EUR' | 'RON' | 'USD';
     amount: number;
   };
