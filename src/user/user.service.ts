@@ -34,6 +34,7 @@ export class UserService {
     const createdUser = await this.prismaService.user.create({
       include: { bank_account: true },
       data: {
+        mobileTokens: user.mobileToken ? [user.mobileToken] : [],
         email: user.email,
         first_name: user.first_name,
         last_name: user.last_name,

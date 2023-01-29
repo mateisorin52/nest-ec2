@@ -23,6 +23,7 @@ model User {
   bank_account    BankAccount[]
   friends         User[]        @relation("friends")
   friendsRelation User[]        @relation("friends")
+  mobileTokens    String[]
   // Other fields
 }
 

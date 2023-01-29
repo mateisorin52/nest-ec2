@@ -15,4 +15,5 @@ export class UserDto {
     currency: 'EUR' | 'RON' | 'USD';
     amount: number;
   };
+  mobileToken: string;
 }
